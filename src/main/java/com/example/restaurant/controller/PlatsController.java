@@ -1,5 +1,6 @@
 package com.example.restaurant.controller;
 
+import com.example.restaurant.dto.PlatsDTO;
 import com.example.restaurant.entity.Plats;
 import com.example.restaurant.service.PlatsService;
 import jakarta.validation.Valid;
@@ -22,15 +23,18 @@ public class PlatsController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createPlat(@Valid @RequestBody Plats plats, BindingResult bindingResult){
+    public ResponseEntity<PlatsDTO> createPlat(@Valid @RequestBody PlatsDTO plats/*, BindingResult bindingResult*/){
 
-        if(bindingResult.hasErrors()){
+        PlatsDTO PlatCreatedDTO;
+
+        /*if(bindingResult.hasErrors()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
+        }*/
 
-        platsService.addPlats(plats);
-        return ResponseEntity.ok("created plat");
+        PlatCreatedDTO = platsService.addPlats(plats);
+        //return ResponseEntity.ok("created plat");
+        return new ResponseEntity<>(PlatCreatedDTO, HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -1,8 +1,10 @@
 package com.example.restaurant.controller;
 
-import com.example.restaurant.dto.ClientsDto;
+import com.example.restaurant.dto.ClientDto;
+import com.example.restaurant.dto.ClientsDTO;
 import com.example.restaurant.entity.Clients;
-import com.example.restaurant.service.ClientsMapperService;
+import com.example.restaurant.exception.ClientNotFoundException;
+import com.example.restaurant.service.ClientMapperService;
 import com.example.restaurant.service.ClientsService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,34 +19,40 @@ import java.util.Objects;
 public class ClientsController {
 
     private final ClientsService clientsService;
-    private final ClientsMapperService clientsMapperService;
+    private final ClientMapperService clientMapperService;
 
-    public ClientsController(ClientsService clientsService, ClientsMapperService clientsMapperService) {
+    public ClientsController(ClientsService clientsService, ClientMapperService clientMapperService) {
         this.clientsService = clientsService;
-        this.clientsMapperService = clientsMapperService;
+        this.clientMapperService = clientMapperService;
     }
 
     @PostMapping
-    public ResponseEntity<String> createClient(@Valid @RequestBody Clients client, BindingResult bindingResult){
+    public ResponseEntity<ClientsDTO> createClient(@RequestBody @Valid ClientsDTO client/*, BindingResult bindingResult*/){
 
-        if(bindingResult.hasErrors()){
+        ClientsDTO ClientCreatedDTO;
+
+        /*if(bindingResult.hasErrors()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
+        }*/
 
-        clientsService.addClient(client);
-        return ResponseEntity.ok("created user");
+        ClientCreatedDTO = clientsService.addClient(client);
+        //return ResponseEntity.ok("created user");
+        return new ResponseEntity<>(ClientCreatedDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClient(@PathVariable Long id, @Valid @RequestBody Clients client, BindingResult bindingResult){
+    public ResponseEntity<ClientsDTO> updateClient(@PathVariable Long id, @Valid @RequestBody ClientsDTO client/*, BindingResult bindingResult*/){
 
-        if(bindingResult.hasErrors()){
+        ClientsDTO ClientUpdatedDTO;
+
+        /*if(bindingResult.hasErrors()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        clientsService.updateClient(id, client);
-        return ResponseEntity.ok("updated client");
+        }*/
+        ClientUpdatedDTO = clientsService.updateClient(id, client);
+        //return ResponseEntity.ok("updated client");
+        return new ResponseEntity<>(ClientUpdatedDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -54,7 +62,7 @@ public class ClientsController {
     }
 
     @GetMapping("/dto/{id}")
-    public ClientsDto getClient(@PathVariable Long id){
-        return clientsMapperService.getUserById(id);
+    public ClientDto getClient(@PathVariable Long id){
+        return clientMapperService.getUserById(id);
     }
 }

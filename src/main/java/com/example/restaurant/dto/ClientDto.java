@@ -1,6 +1,6 @@
 package com.example.restaurant.dto;
 
-public record ClientsDto (
+public record ClientDto(
         Long id,
         String fullname
 ){

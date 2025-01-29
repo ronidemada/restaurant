@@ -1,29 +1,30 @@
 package com.example.restaurant.service;
 
-import com.example.restaurant.dto.ClientsDto;
+import com.example.restaurant.dto.ClientsDTO;
 import com.example.restaurant.entity.Clients;
-import com.example.restaurant.exception.ClientNotFoundException;
-import com.example.restaurant.repository.IClientsRepository;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.util.ArrayList;
+
 public class ClientsMapperService {
 
-    private final IClientsRepository clientsRepository;
-
-    public ClientsMapperService(IClientsRepository clientsRepository) {
-        this.clientsRepository = clientsRepository;
-    }
-
-    public ClientsDto toDTO(Clients client){
-        return new ClientsDto(
-                client.getId(),
-                client.getLastname() +" "+client.getFirstname()
+    // Convert Clients JPA Entity into ClientsDTO
+    public static ClientsDTO mapToClientsDTO(Clients clients){
+        return new ClientsDTO(
+                clients.getId(),
+                clients.getFirstname(),
+                clients.getLastname(),
+                clients.getEmail()
         );
     }
 
-    public ClientsDto getUserById(Long id) {
-        Clients clients = clientsRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found DTO"));
-        return toDTO(clients);
+    // Convert ClientsDTO into Clients JPA Entity
+    public static Clients mapToClients(ClientsDTO clientsDTO){
+        return new Clients(
+                clientsDTO.getId(),
+                clientsDTO.getFirstname(),
+                clientsDTO.getLastname(),
+                clientsDTO.getEmail(),
+                new ArrayList<>()
+        );
     }
 }

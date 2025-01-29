@@ -1,8 +1,10 @@
 package com.example.restaurant.service;
 
+import com.example.restaurant.dto.ClientsDTO;
 import com.example.restaurant.entity.Clients;
 import com.example.restaurant.exception.ClientNotFoundException;
 import com.example.restaurant.repository.IClientsRepository;
+import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,24 +21,40 @@ public class ClientsService {
         this.clientsRepository = clientsRepository;
     }
 
-    public Clients addClient(Clients client) {
-        return clientsRepository.save(client);
+    public ClientsDTO addClient(ClientsDTO clientDTO) {
+
+        // Convert UserDto into User JPA Entity
+        Clients clients = ClientsMapperService.mapToClients(clientDTO);
+
+        Clients savedClients = clientsRepository.save(clients);
+
+        // Convert User JPA entity to UserDto
+        ClientsDTO savedDTO = ClientsMapperService.mapToClientsDTO(savedClients);
+
+        return savedDTO;
     }
 
-    public void updateClient(Long id, Clients clients){
+    public ClientsDTO updateClient(Long id, ClientsDTO clientDTO){
 
         Optional<Clients> optionalClients = clientsRepository.findById(id);
 
-        if (optionalClients.isPresent()) {
+        // Convert UserDto into User JPA Entity
+        Clients clients = ClientsMapperService.mapToClients(clientDTO);
+
+        //if (optionalClients.isPresent()) {
 
             Clients clientUpdate = optionalClients.get();
             clientUpdate.setLastname(clients.getLastname());
             clientUpdate.setFirstname(clients.getFirstname());
             clientUpdate.setEmail(clients.getEmail());
 
-            clientsRepository.save(clientUpdate);
-        }
+            Clients updatedClients = clientsRepository.save(clientUpdate);
 
+            // Convert User JPA entity to UserDto
+            ClientsDTO updatedDTO = ClientsMapperService.mapToClientsDTO(updatedClients);
+
+            return updatedDTO;
+        //}
     }
 
     public void deleteClient(Long id) {

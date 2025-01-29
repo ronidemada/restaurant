@@ -1,6 +1,7 @@
 package com.example.restaurant.controller;
 
 import com.example.restaurant.entity.Clients;
+import com.example.restaurant.entity.Commandes;
 import com.example.restaurant.entity.Plats;
 import com.example.restaurant.service.CommandesService;
 import com.example.restaurant.service.PlatsService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/commande")
+@RequestMapping("/commandes")
 public class CommandesController {
 
     private final CommandesService commandesService;
@@ -23,10 +24,14 @@ public class CommandesController {
         this.commandesService = commandesService;
     }
 
-    @PostMapping("clients/{id}")
-    public ResponseEntity<String> createCmd(@PathVariable Long id, @RequestBody List<Plats> platList){
-
-        commandesService.addCommande(id,platList);
+    @PostMapping("/client/{id_user}")
+    public ResponseEntity<String> createCmd(@PathVariable Long id_user, @RequestBody List<Plats> platList){
+        commandesService.addCommande(id_user,platList);
         return ResponseEntity.ok("created commande");
+    }
+
+    @GetMapping("/client/{id_user}")
+    public List<Commandes> createCmd(@PathVariable Long id_user){
+        return commandesService.getAllCommande(id_user);
     }
 }

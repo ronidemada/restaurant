@@ -27,11 +27,23 @@ public class CommandesService {
         Clients client = clientsRepository.findById(idClient)
                 .orElseThrow(() -> new ClientNotFoundException("Le Client avec ID " + idClient + " non trouvé pour la commande"));
 
+        Double total = (double) 0;
+
+        for(Plats plats : platsList){
+            total+=plats.getPrice();
+        }
+
         Commandes commande = new Commandes();
         commande.setClients(client);
         commande.setPlatsList(platsList);
         commande.setDate(LocalDate.now());
+        commande.setTotal(total);
         commandesRepository.save(commande);
 
+    }
+
+    public List<Commandes> getAllCommande(Long idClient){
+
+        return commandesRepository.getCommandeByClientsId(idClient);
     }
 }

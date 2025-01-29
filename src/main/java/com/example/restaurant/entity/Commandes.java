@@ -29,4 +29,6 @@ public class Commandes {
 
     private LocalDate date;
 
+    private Double total;
+
 }
