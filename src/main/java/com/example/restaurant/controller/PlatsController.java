@@ -38,7 +38,7 @@ public class PlatsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Plats>> getAllPlats() {
+    public ResponseEntity<List<PlatsDTO>> getAllPlats() {
         return ResponseEntity.ok(platsService.getAllPlats());
     }
 

@@ -10,6 +10,7 @@ import com.example.restaurant.repository.ICommandesRepository;
 import com.example.restaurant.repository.IPlatsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +39,15 @@ public class PlatsService {
         return savedDTO;
     }
 
-    public List<Plats> getAllPlats() {
-        return platsRepository.findAll();
+    public List<PlatsDTO> getAllPlats() {
+        PlatsDTO platDTO;
+        List<PlatsDTO> platsDTOS = new ArrayList<>();
+        List<Plats> platsList = platsRepository.findAll();
+        for (Plats plat : platsList){
+            platDTO = PlatsMapperService.mapToPlatsDTO(plat);
+            platsDTOS.add(platDTO);
+        }
+        return platsDTOS;
     }
 
     public void deletePlats(Long id) {
