@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class FakeTest {
 
-    @InjectMocks
+   /* @InjectMocks
     private FakeController fakeController;
 
     @Autowired
@@ -79,7 +79,7 @@ public class FakeTest {
 
     }
 
-    /*@Test
+    @Test
     void fakeRPost() {
         String port ="8080";
         String url = "http://localhost:" + port + "/fake";
